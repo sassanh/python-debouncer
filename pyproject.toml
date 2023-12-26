@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "python-debouncer"
+version = "0.1.0"
+description = "Debouncer and friends for Python"
+authors = ["Sassan Haradji <sassanh@gmail.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+packages = [{ include = "debouncer" }]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-immutable = "^1.0.0"
+lock = "^2018.3.25.2110"
+
+
+[tool.poetry.scripts]
+demo = "demo:main"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.24.3"
+pyright = "^1.1.342"
+ruff = "^0.1.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+lint = "pyright -p pyproject.toml ."
+
+[tool.ruff]
+select = ['ALL']
+ignore = []
+
+fixable = ['ALL']
+unfixable = []
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+multiline-quotes = "double"
+
+[tool.ruff.format]
+quote-style = 'single'
