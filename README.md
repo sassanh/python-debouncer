@@ -2,9 +2,17 @@
 
 ## Description
 
-This Python package provides a debounce decorator using asyncio, ensuring function execution is managed within the asyncio event loop without spawning new threads. It's designed for rate-limiting function calls in asynchronous Python applications.
+This Python package provides a `debounce` decorator.
+It's designed for rate-limiting function calls in asynchronous Python applications.
+
+## 📋 Requirements
+
+- Python 3.9 or later.
+- [python-immutable](https://github.com/sassanh/python-immutable)
 
 ## 📦 Installation
+
+The package handle in PyPI is `python-debouncer`
 
 ### Pip
 
@@ -18,7 +26,7 @@ pip install python-debouncer
 poetry add python-debouncer
 ```
 
-## 🚀 Usage
+## 🛠 Usage
 
 Import the decorator and apply it to your async functions:
 
@@ -34,21 +42,18 @@ async def your_function():
 
 ### ⚠️ Important Note
 
-`maxWait` in Lodash implementation is renamed to `time_window` here, I think semantically it makes more sense.
+`maxWait` in Lodash implementation is renamed to `time_window` here, I think semantically
+it makes more sense.
 
 ## 🎉 Demo
 
 See `demo.py` for a usage example.
 
-## Requirements
-
-- Python 3.9+
-- asyncio library
-
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome. Please fork the repository and open a pull request.
 
-## License
+## 🔒 License
 
-This project is released under the Apache-2.0 License. See the [LICENSE](./LICENSE) file for more details.
+This project is released under the Apache-2.0 License. See the [LICENSE](./LICENSE)
+file for more details.
