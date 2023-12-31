@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-debouncer"
-version = "0.1.1"
+version = "0.1.2"
 description = "Debouncer and friends for Python"
 authors = ["Sassan Haradji <sassanh@gmail.com>"]
 license = "Apache-2.0"

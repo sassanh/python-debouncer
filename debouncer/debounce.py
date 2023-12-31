@@ -9,8 +9,9 @@ from dataclasses import dataclass
 from functools import wraps
 from typing import (
     TYPE_CHECKING,
-    Awaitable,
+    Any,
     Callable,
+    Coroutine,
     Generic,
     ParamSpec,
     Protocol,
@@ -51,7 +52,7 @@ class DebounceOptions(Immutable):
 
 @dataclass
 class DebounceState(Generic[Args, Result_co]):
-    func: Callable[Args, Awaitable[Result_co]]
+    func: Callable[Args, Coroutine[Result_co, Any, Any]]
     wait: float
     leading: bool = False
     trailing: bool = True
@@ -147,14 +148,14 @@ def debounce(
     wait: float,
     options: DebounceOptions | None = None,
 ) -> Callable[
-    [Callable[Args, Awaitable[Result_co]]],
-    Debounced[Args, Awaitable[Result_co | None]],
+    [Callable[Args, Coroutine[Result_co, Any, Any]]],
+    Debounced[Args, Coroutine[Result_co | None, Any, Any]],
 ]:
     options = options or DebounceOptions()
 
     def decorator(
-        func: Callable[Args, Awaitable[Result_co]],
-    ) -> Debounced[Args, Awaitable[Result_co | None]]:
+        func: Callable[Args, Coroutine[Result_co, Any, Any]],
+    ) -> Debounced[Args, Coroutine[Result_co | None, Any, Any]]:
         state = DebounceState[Args, Result_co](
             func=func,
             wait=wait,

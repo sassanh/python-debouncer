@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.2
+
+- refactor: improve typing of the return type of the returned function
+
 ## Version 0.1.1
 
 - docs: improve `README.md`
