@@ -52,7 +52,7 @@ class DebounceOptions(Immutable):
 
 @dataclass
 class DebounceState(Generic[Args, Result_co]):
-    func: Callable[Args, Coroutine[Result_co, Any, Any]]
+    func: Callable[Args, Coroutine[Any, Any, Result_co]]
     wait: float
     leading: bool = False
     trailing: bool = True
@@ -148,14 +148,14 @@ def debounce(
     wait: float,
     options: DebounceOptions | None = None,
 ) -> Callable[
-    [Callable[Args, Coroutine[Result_co, Any, Any]]],
-    Debounced[Args, Coroutine[Result_co | None, Any, Any]],
+    [Callable[Args, Coroutine[Any, Any, Result_co]]],
+    Debounced[Args, Coroutine[Any, Any, Result_co | None]],
 ]:
     options = options or DebounceOptions()
 
     def decorator(
-        func: Callable[Args, Coroutine[Result_co, Any, Any]],
-    ) -> Debounced[Args, Coroutine[Result_co | None, Any, Any]]:
+        func: Callable[Args, Coroutine[Any, Any, Result_co]],
+    ) -> Debounced[Args, Coroutine[Any, Any, Result_co | None]]:
         state = DebounceState[Args, Result_co](
             func=func,
             wait=wait,

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.3
+
+- fix: correct the order of generics for `Coroutine`
+
 ## Version 0.1.2
 
 - refactor: improve typing of the return type of the returned function
