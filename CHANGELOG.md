@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.1.4
+
+- fix: support Python 3.9
+- chore: add github actions for linting and type checking
+
 ## Version 0.1.3
 
 - fix: correct the order of generics for `Coroutine`

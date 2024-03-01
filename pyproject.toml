@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-debouncer"
-version = "0.1.3"
+version = "0.1.4"
 description = "Debouncer and friends for Python"
 authors = ["Sassan Haradji <sassanh@gmail.com>"]
 license = "Apache-2.0"
@@ -9,39 +9,45 @@ packages = [{ include = "debouncer" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-python-immutable = "^1.0.0"
+python-immutable = "^1.0.4"
 lock = "^2018.3.25.2110"
-
-
-[tool.poetry.scripts]
-demo = "demo:main"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.24.3"
-pyright = "^1.1.342"
-ruff = "^0.1.9"
+pyright = "^1.1.352"
+ruff = "^0.3.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.scripts]
+demo = "demo:main"
+
 [tool.poe.tasks]
-lint = "pyright -p pyproject.toml ."
+lint = "ruff . --unsafe-fixes"
+typecheck = "pyright -p pyproject.toml ."
+sanity = ["typecheck", "lint"]
 
 [tool.ruff]
-select = ['ALL']
-ignore = []
+lint.select = ['ALL']
+lint.ignore = ['INP001', 'PLR0911', 'D203', 'D213']
+lint.fixable = ['ALL']
+lint.unfixable = []
 
-fixable = ['ALL']
-unfixable = []
-
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
 inline-quotes = "single"
 multiline-quotes = "double"
 
 [tool.ruff.format]
 quote-style = 'single'
+
+[tool.isort]
+profile = "black"
+
+[tool.pyright]
+exclude = ['typings']
