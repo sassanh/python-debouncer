@@ -6,10 +6,19 @@ from __future__ import annotations
 import asyncio
 import time
 import weakref
+from asyncio.coroutines import iscoroutine
 from dataclasses import dataclass
 from functools import wraps
 from types import MethodType
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, Generic, Protocol, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Coroutine,
+    Generic,
+    Protocol,
+    cast,
+)
 
 from immutable import Immutable
 from typing_extensions import ParamSpec, TypeVar
@@ -27,14 +36,15 @@ Result = TypeVar('Result', infer_variance=True)
 
 
 class Debounced(Protocol, Generic[Args, Result]):
-    def __call__(self: Debounced, *args: Args.args, **kwargs: Args.kwargs) -> Result:
-        ...
+    def __call__(
+        self: Debounced,
+        *args: Args.args,
+        **kwargs: Args.kwargs,
+    ) -> Result: ...
 
-    def cancel(self: Debounced) -> None:
-        ...
+    def cancel(self: Debounced) -> None: ...
 
-    def flush(self: Debounced) -> Result:
-        ...
+    def flush(self: Debounced) -> Result: ...
 
 
 class DebounceOptions(Immutable):
@@ -46,9 +56,11 @@ class DebounceOptions(Immutable):
 
 @dataclass
 class DebounceState(Generic[Args, Result]):
-    func: Callable[Args, Coroutine[Any, Any, Result]] | weakref.ref[
-        Callable[Args, Coroutine[Any, Any, Result]]
-    ] | weakref.WeakMethod
+    func: (
+        Callable[Args, Coroutine[Any, Any, Result] | Result]
+        | weakref.ref[Callable[Args, Coroutine[Any, Any, Result] | Result]]
+        | weakref.WeakMethod
+    )
     wait: float
     leading: bool = False
     trailing: bool = True
@@ -123,10 +135,13 @@ async def _invoke_func(
         return None
     func = state.func() if isinstance(state.func, weakref.ref) else state.func
     if func:
-        state.result = await func(
+        result = func(
             *state.last_args[0],
             **state.last_args[1],
         )
+        if iscoroutine(result):
+            result = await result
+        state.result = result
     else:
         msg = 'Function has been garbage collected'
         raise RuntimeError(msg)
@@ -164,13 +179,13 @@ def debounce(
     wait: float,
     options: DebounceOptions | None = None,
 ) -> Callable[
-    [Callable[Args, Coroutine[Any, Any, Result]]],
+    [Callable[Args, Coroutine[Any, Any, Result] | Result]],
     Debounced[Args, Coroutine[Any, Any, Result | None]],
 ]:
     debounce_options = options or DebounceOptions()
 
     def decorator(
-        func: Callable[Args, Coroutine[Any, Any, Result]],
+        func: Callable[Args, Coroutine[Any, Any, Result] | Result],
     ) -> Debounced[Args, Coroutine[Any, Any, Result | None]]:
         if debounce_options.keep_ref:
             func_ref = func

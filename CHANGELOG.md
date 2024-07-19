@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.5
+
+- feat: support non-async functions
+
 ## Version 0.1.4
 
 - fix: support Python 3.9

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-debouncer"
-version = "0.1.4"
+version = "0.1.5"
 description = "Debouncer and friends for Python"
 authors = ["Sassan Haradji <sassanh@gmail.com>"]
 license = "Apache-2.0"
@@ -10,15 +10,14 @@ packages = [{ include = "debouncer" }]
 [tool.poetry.dependencies]
 python = "^3.9"
 python-immutable = "^1.0.4"
-lock = "^2018.3.25.2110"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.24.3"
-pyright = "^1.1.352"
-ruff = "^0.3.0"
+pyright = "^1.1.372"
+ruff = "^0.5.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -28,7 +27,7 @@ build-backend = "poetry.core.masonry.api"
 demo = "demo:main"
 
 [tool.poe.tasks]
-lint = "ruff . --unsafe-fixes"
+lint = "ruff check . --unsafe-fixes"
 typecheck = "pyright -p pyproject.toml ."
 sanity = ["typecheck", "lint"]
 
